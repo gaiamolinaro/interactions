@@ -183,6 +183,8 @@
 #'   the cluster variable in the input data frame (as a string). Alternately,
 #'   provide a vector of clusters.
 #'
+#' @param rev.lty Reverse the linetype order? Default is FALSE
+#'
 #' @param ... extra arguments passed to `make_predictions`
 #'
 #' @inheritParams cat_plot
@@ -342,7 +344,7 @@ interact_plot <- function(model, pred, modx, modx.values = NULL, mod2 = NULL,
                           point.size = 1.5, point.shape = FALSE,
                           jitter = 0, rug = FALSE, rug.sides = "b",
                           partial.residuals = FALSE, point.alpha = 0.6,
-                          color.class = NULL,  ...) {
+                          color.class = NULL, rev.lty = FALSE, ...) {
 
   # Capture extra arguments
   dots <- list(...)
@@ -480,7 +482,7 @@ interact_plot <- function(model, pred, modx, modx.values = NULL, mod2 = NULL,
                         modxvals2 = modxvals2, mod2vals2 = mod2vals2,
                         weights = weights, rug = rug, rug.sides = rug.sides,
                         point.size = point.size, point.shape = point.shape,
-                        facet.modx = facet.modx, point.alpha = point.alpha)
+                        facet.modx = facet.modx, point.alpha = point.alpha, rev.lty = rev.lty)
   }
 
 }
@@ -498,7 +500,7 @@ plot_mod_continuous <- function(predictions, pred, modx, resp, mod2 = NULL,
                                 mod2vals2 = NULL, weights = NULL, rug = FALSE,
                                 rug.sides = "b",
                                 point.shape = FALSE, point.size = 2,
-                                facet.modx = FALSE, point.alpha = 0.6) {
+                                facet.modx = FALSE, point.alpha = 0.6, rev.lty = FALSE) {
 
   d <- data
   pm <- predictions
@@ -557,9 +559,9 @@ plot_mod_continuous <- function(predictions, pred, modx, resp, mod2 = NULL,
   ltypes <- types[seq_along(modxvals2)]
 
   # Reverse the order of the linetypes to make thick line go to biggest value
-  if (is.numeric(modxvals2) & all(sort(modxvals2) == modxvals2)) {
+  if (is.numeric(modxvals2) & all(sort(modxvals2) == modxvals2) & (rev.lty == TRUE)) {
     ltypes <- rev(ltypes)
-  } else if (!is.null(mod2) & !(is.numeric(modxvals2) & !all(sort(modxvals2) == modxvals2))) { # also flip for factor second moderators
+  } else if (!is.null(mod2) & !(is.numeric(modxvals2) & !all(sort(modxvals2) == modxvals2))  & (rev.lty == TRUE)) { # also flip for factor second moderators
     ltypes <- rev(ltypes)
   }
 
